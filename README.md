@@ -1,4 +1,4 @@
-# Análisis de equivalencia entre planes de estudio de universidades diferentes
+# ACPEM-SICUE (Análisis y Comparación de Planes de Estudio de Movilidad SICUE)
 
 ## Problema
 
@@ -24,33 +24,34 @@ estudiante tiene que:
 El acuerdo académico es vinculante: una vez firmado por las tres partes, lo que
 el estudiante curse en destino se reconoce automáticamente en origen, y el
 acuerdo solo puede modificarse durante el primer mes desde el inicio del
-semestre ([Convocatoria SICUE
-2026/2027](https://www.crue.org/wp-content/uploads/2025/12/00.-Convocatoria_SICUE_2026-2027_vf-1.pdf)).
-Por eso la decisión clave es la del coordinador de origen al firmar: en ese momento
-se juzga si las asignaturas elegidas son equivalentes.
+semestre ([Convocatoria SICUE 2026/2027][convocatoria]). Por eso la decisión
+clave es la del coordinador de origen al firmar: en ese momento se juzga si las
+asignaturas elegidas son equivalentes.
 
 ### Criterio de equivalencia
 
-La equivalencia entre asignaturas se evalúa por **competencias y contenidos**.
-El [Real Decreto
-822/2021](https://www.boe.es/buscar/act.php?id=BOE-A-2021-15781) (art. 10)
-regula el reconocimiento de créditos entre títulos universitarios oficiales y
-encarga a cada universidad aprobar su propia normativa. Estas normativas
-concretan el criterio con la misma fórmula: la adecuación entre las competencias
-y conocimientos asociados a las asignaturas cursadas y los previstos en el plan
-de estudios. La [Convocatoria SICUE
-2026/2027](https://www.crue.org/wp-content/uploads/2025/12/00.-Convocatoria_SICUE_2026-2027_vf-1.pdf)
-añade dos cosas. El intercambio debe adecuarse al perfil curricular del estudiante.
-Además, las optativas de destino que no existan en el plan de origen pueden
-incorporarse al expediente como optativas.
+La equivalencia entre asignaturas se evalúa por **competencias, contenidos y
+créditos**. El [Real Decreto 822/2021][rd822] (art. 10) regula el
+reconocimiento de créditos entre títulos universitarios oficiales y encarga a
+cada universidad aprobar su propia normativa. En la UGR, el [Reglamento de
+reconocimiento][ncg323] (art. 6) fija como criterio «la adecuación entre las
+competencias, los conocimientos y el número de créditos», y la [normativa de
+movilidad nacional de la ETSIIT][etsiit] (Anexo I) lo concreta: se comparan los
+contenidos y los ECTS, con especial peso del contenido, y una o varias
+asignaturas de origen pueden corresponder a una o varias de destino. La
+[Convocatoria SICUE 2026/2027][convocatoria] añade dos cosas. El intercambio
+debe adecuarse al perfil curricular del estudiante. Además, las optativas de
+destino que no existan en el plan de origen pueden incorporarse al expediente
+como optativas.
 
 En este proyecto, ese criterio se traduce en las siguientes reglas:
 
-- Una asignatura de origen queda **cubierta** por una o varias asignaturas de
-  destino si se cumplen dos condiciones: la similitud entre sus competencias y
-  contenidos supera un umbral, y la suma de sus ECTS es igual o mayor que los
-  ECTS de la asignatura de origen.
-- Cada asignatura de destino cubre, como máximo, una asignatura de origen.
+- Una o varias asignaturas de origen quedan **cubiertas** por una o varias
+  asignaturas de destino si se cumplen dos condiciones: sus contenidos y
+  competencias están recogidos en los de destino, y la suma de los ECTS de
+  destino es igual o mayor que la suma de los ECTS de origen.
+- Cada asignatura de destino forma parte, como máximo, de una de esas
+  correspondencias.
 - Una optativa de origen puede cubrirse con una optativa de destino que no esté
   en el plan de origen y tenga ECTS suficientes, ya que esta se incorpora al
   expediente como optativa.
@@ -79,11 +80,9 @@ Las guías docentes de las asignaturas son públicas, al igual que otros criteri
 de equivalencia, como el número de créditos ECTS. Las guías están en español y
 todas incluyen competencias, resultados de aprendizaje, contenidos y evaluación,
 pero cada universidad las organiza y publica a su manera: la UGR en páginas web
-y la UPM en PDF. Por ejemplo, las del [doble grado en Ingeniería
-Informática y Matemáticas de la
-UGR](https://grados.ugr.es/ramas/dobles-titulaciones/grado-ingenieria-informatica-matematicas)
-y las [guías de aprendizaje de la ETSI de Ingenieros Informáticos de la
-UPM](https://www.etsiinf.upm.es/?pagina=3079).
+y la UPM en PDF. Por ejemplo, las del [doble grado en Ingeniería Informática y
+Matemáticas de la UGR][plan-ugr] y las [guías de aprendizaje de la ETS de
+Ingenieros Informáticos de la UPM][guias-upm].
 
 ### Escala del problema
 
@@ -103,8 +102,8 @@ semestre:**
 | 4º | 28: 15 obligatorias de especialidad (3 por mención) + 13 optativas de especialidad |
 | **Total** | **43** |
 
-Un estudiante de último curso solo puede escoger asignaturas de 3º y 4º, es
-decir, 33.
+Si un estudiante de último curso se limita a asignaturas de 3º y 4º, tiene 33
+candidatas.
 
 | | Medio curso (ETSIIT, último curso) | Curso completo (estimación) |
 | --- | --- | --- |
@@ -120,57 +119,58 @@ conflicto de horarios obliga a repetir la búsqueda.
 
 ## Lógica de negocio
 
-El enfoque elegido es **TF-IDF con similitud del coseno, calculada por separado
-para las competencias y para los contenidos de cada guía docente**. La similitud
-de una pareja de asignaturas es la media ponderada de ambas: w ·
-sim(competencias) + (1 − w) · sim(contenidos). La pareja se considera
-equivalente si esa similitud supera un umbral θ. Los motivos para usar esta
-lógica son los siguientes:
+Para cada asignatura o grupo de asignaturas de origen se calcula qué parte de su
+temario está recogida en una o varias asignaturas de destino. Cada tema se
+representa con TF-IDF, que da poco peso al vocabulario común a todas las guías,
+y se compara con los temas de destino mediante la similitud del coseno. Un tema
+queda cubierto si se parece lo suficiente a alguno de destino, y la asignatura
+o el grupo, si lo está una proporción suficiente de sus temas y los ECTS de
+destino alcanzan los de origen. Las competencias específicas se comparan igual,
+pero con menos peso, porque la normativa da especial peso al contenido.
 
-- **TF-IDF frente a Jaccard.** El índice de Jaccard da el mismo peso a todos los
-  términos. Las guías docentes están llenas de vocabulario común a cualquier
-  asignatura (competencia, evaluación, alumnado, prácticas), que inflaría la
-  similitud entre asignaturas sin relación. TF-IDF reduce el peso de esos
-  términos, porque aparecen en casi todas las guías.
-- **Similitud del coseno.** No depende de la longitud del texto, y la extensión
-  de las guías varía mucho entre universidades.
-- **Comparación por secciones.** Separa las dos dimensiones del criterio de la
-  normativa: competencias y contenidos.
-- **Explicabilidad.** Para cada pareja de asignaturas se pueden mostrar los
-  términos que más aportan a la similitud. Eso es lo que el estudiante puede
-  presentar al coordinador para justificar el acuerdo.
+Con esas coberturas se genera el plan que cubre más ECTS de origen cumpliendo
+las reglas anteriores, y se indica qué temas quedan sin cubrir, para que el
+estudiante sepa antes de la firma qué puede rechazar el coordinador.
 
 ## Validación
 
-Los parámetros θ y w se ajustan, y la solución se evalúa, con dos tipos de
-casos:
-
-- **Casos positivos.** Son acuerdos académicos SICUE ya aprobados, es decir,
-  firmados por el coordinador de origen. La solución tiene que darlos como
-  válidos. Se pueden obtener de estudiantes SICUE de cursos anteriores, que no
-  son pocos: según CRUE, el programa sumó 63.268 movilidades en sus primeros
-  veinte años ([CRUE,
-  2019](https://www.crue.org/2019/10/aniversario-sicue-20/)), una media de unas
-  3.000 al año.
-- **Casos negativos.** Son planes que el coordinador de origen no firmaría. Se
-  obtienen preguntándole por propuestas concretas, por ejemplo variantes de
-  acuerdos aprobados en las que una asignatura se sustituye por otra sin
-  relación. La solución tiene que rechazarlos.
-
-La métrica es el porcentaje de casos de cada tipo clasificados correctamente.
-Una parte de los casos se reserva para comprobar los parámetros elegidos, no
-solo para ajustarlos.
+Los umbrales y pesos se ajustan con correspondencias de acuerdos SICUE ya
+firmados, que la solución debe dar como cubiertas, y con correspondencias
+rechazadas por el coordinador, como la de Análisis Funcional de la HU1, que
+debe dar como no cubiertas. Los casos se obtienen de estudiantes SICUE de
+cursos anteriores y de los coordinadores de origen, a los que se pueden pedir
+correspondencias aprobadas y rechazadas. Una parte de los casos se reserva para
+comprobar los parámetros elegidos.
 
 ## Planificación
 
-- [User journeys](docs/user-journeys.md)
-- [Personas](docs/personas.md)
-- [Historias de usuario](docs/historias-de-usuario.md)
-  ([issues](https://github.com/diego-vigil-sosa/ACPEM-SICUE/issues?q=label%3Auser-stories))
-- [Milestones](docs/milestones-proyecto.md) ([en
-  GitHub](https://github.com/diego-vigil-sosa/ACPEM-SICUE/milestones))
+La planificación parte de la entrevista a un estudiante SICUE y sigue este
+orden:
+
+1. [User journey][journey]: el recorrido de un estudiante del doble grado en
+   Ingeniería Informática y Matemáticas de la UGR durante su SICUE de curso
+   completo en la UPM, con los puntos de dolor y las necesidades de cada etapa.
+2. [Personas][personas]: el perfil de usuario que se extrae de ese recorrido.
+3. [Historias de usuario][user-stories] ([issues][issues-hu]): la HU1 recoge el
+   problema de elaborar un acuerdo académico admisible, la etapa más costosa
+   del recorrido.
+4. [Milestones][milestones] ([en GitHub][milestones-gh]): el M0 modeliza la
+   HU1, y el M1 añade sobre ese modelo la lógica de negocio y sus tests.
 
 ## Documentación adicional
 
-- [Configuración de git y GitHub](docs/configuracion.md)
+- [Configuración de git y GitHub](docs/configuration.md)
 - [Fotografía de la tarjeta del juego de rol](docs/img/tarjeta.jpeg)
+
+[convocatoria]: https://www.crue.org/wp-content/uploads/2025/12/00.-Convocatoria_SICUE_2026-2027_vf-1.pdf
+[rd822]: https://www.boe.es/buscar/act.php?id=BOE-A-2021-15781
+[ncg323]: https://secretariageneral.ugr.es/sites/webugr/secretariageneral/public/inline-files/NCG323.pdf
+[etsiit]: https://etsiit.ugr.es/sites/centros/etsiit/public/inline-files/Reglamento_Reconocimiento_Nacional_ETSIIT_2021.pdf
+[plan-ugr]: https://grados.ugr.es/ramas/dobles-titulaciones/grado-ingenieria-informatica-matematicas
+[guias-upm]: https://www.etsiinf.upm.es/?pagina=3175
+[journey]: docs/user-journey.md
+[personas]: docs/personas.md
+[user-stories]: docs/user-stories.md
+[issues-hu]: https://github.com/diego-vigil-sosa/ACPEM-SICUE/issues?q=label%3Auser-stories
+[milestones]: docs/milestones.md
+[milestones-gh]: https://github.com/diego-vigil-sosa/ACPEM-SICUE/milestones
