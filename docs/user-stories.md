@@ -94,7 +94,7 @@ estas:
   [Reglamento de reconocimiento de la UGR][ncg323] y
   [normativa de movilidad nacional de la ETSIIT][etsiit].
 
-[hu1]: https://github.com/diego-vigil-sosa/ACPEM-SICUE/issues/2
+[hu1]: https://github.com/diego-vigil-sosa/ACAA-SICUE/issues/2
 [journey]: user-journey.md
 [convocatoria]: https://www.crue.org/wp-content/uploads/2025/12/00.-Convocatoria_SICUE_2026-2027_vf-1.pdf
 [ncg323]: https://secretariageneral.ugr.es/sites/webugr/secretariageneral/public/inline-files/NCG323.pdf

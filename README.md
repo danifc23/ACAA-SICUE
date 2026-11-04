@@ -1,4 +1,4 @@
-# ACPEM-SICUE (Análisis y Comparación de Planes de Estudio de Movilidad SICUE)
+# ACAA-SICUE (Asistente de Construcción de Acuerdos Académicos SICUE)
 
 ## Problema
 
@@ -180,6 +180,6 @@ orden:
 [journey]: docs/user-journey.md
 [personas]: docs/personas.md
 [user-stories]: docs/user-stories.md
-[issues-hu]: https://github.com/diego-vigil-sosa/ACPEM-SICUE/issues?q=label%3Auser-stories
+[issues-hu]: https://github.com/diego-vigil-sosa/ACAA-SICUE/issues?q=label%3Auser-stories
 [milestones]: docs/milestones.md
-[milestones-gh]: https://github.com/diego-vigil-sosa/ACPEM-SICUE/milestones
+[milestones-gh]: https://github.com/diego-vigil-sosa/ACAA-SICUE/milestones
