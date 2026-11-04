@@ -1,6 +1,6 @@
 # Milestones
 
-## M0. Problema de la HU1 en código
+## M0. Modelo del dominio de la HU1
 
 Aplicar DDD a la HU1.
 Es válido si se ha seguido esa metodología, y es la base sobre la que el M1
