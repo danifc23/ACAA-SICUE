@@ -95,7 +95,7 @@ estas:
   [normativa de movilidad nacional de la ETSIIT][etsiit].
 
 [hu1]: https://github.com/diego-vigil-sosa/ACPEM-SICUE/issues/2
-[journey]: user-journeys.md
+[journey]: user-journey.md
 [convocatoria]: https://www.crue.org/wp-content/uploads/2025/12/00.-Convocatoria_SICUE_2026-2027_vf-1.pdf
 [ncg323]: https://secretariageneral.ugr.es/sites/webugr/secretariageneral/public/inline-files/NCG323.pdf
 [etsiit]: https://etsiit.ugr.es/sites/centros/etsiit/public/inline-files/Reglamento_Reconocimiento_Nacional_ETSIIT_2021.pdf
