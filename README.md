@@ -128,9 +128,18 @@ o el grupo, si lo está una proporción suficiente de sus temas y los ECTS de
 destino alcanzan los de origen. Las competencias específicas se comparan igual,
 pero con menos peso, porque la normativa da especial peso al contenido.
 
-Con esas coberturas se genera el plan que cubre más ECTS de origen cumpliendo
-las reglas anteriores, y se indica qué temas quedan sin cubrir, para que el
-estudiante sepa antes de la firma qué puede rechazar el coordinador.
+Con esas coberturas se resuelven dos tareas:
+
+- **Analizar un acuerdo académico.** Dado un acuerdo propuesto por el
+  estudiante, se comprueba si cumple las reglas anteriores, se calcula su grado
+  de equivalencia y se indica si es equivalente.
+- **Generar un acuerdo académico.** Entre las asignaturas elegibles en destino,
+  se busca el plan que cubre más ECTS de origen cumpliendo las reglas
+  anteriores. Esto sirve para empezar el acuerdo o para rehacerlo cuando falta
+  una plaza o hay un conflicto de horarios.
+
+En los dos casos se indica qué temas quedan sin cubrir, para que el estudiante
+sepa antes de la firma qué puede rechazar el coordinador.
 
 ## Validación
 
